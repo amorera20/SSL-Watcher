@@ -25,6 +25,7 @@ This project provides an SSL monitoring solution built with Flask, Prometheus, A
 ## 📂 Project Structure
 
 CERT-WATCHER
+.
 ├── app
 │   └── cert_watcher.py
 │   ├── requirements.txt
