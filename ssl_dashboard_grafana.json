@@ -1,0 +1,135 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": null,
+    "title": "SSL Certificate Monitoring",
+    "tags": [
+      "ssl",
+      "certificates",
+      "monitoring"
+    ],
+    "timezone": "browser",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "type": "bargauge",
+        "title": "D\u00edas restantes para expiraci\u00f3n del certificado",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "ssl_cert_expiry_days",
+            "legendFormat": "{{domain}}",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "d",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "orange",
+                  "value": 30
+                },
+                {
+                  "color": "green",
+                  "value": 60
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        }
+      },
+      {
+        "type": "stat",
+        "title": "Estado del Certificado",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "ssl_cert_valid",
+            "legendFormat": "{{domain}}",
+            "refId": "B"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "0": {
+                    "text": "Inv\u00e1lido"
+                  },
+                  "1": {
+                    "text": "V\u00e1lido"
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": 0
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "x": 12,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        }
+      },
+      {
+        "type": "table",
+        "title": "Resumen de Certificados",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "ssl_cert_expiry_days",
+            "legendFormat": "{{domain}}",
+            "refId": "C"
+          },
+          {
+            "expr": "ssl_cert_valid",
+            "legendFormat": "{{domain}}",
+            "refId": "D"
+          }
+        ],
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 24,
+          "h": 10
+        },
+        "options": {
+          "showHeader": true
+        }
+      }
+    ]
+  },
+  "overwrite": true
+}

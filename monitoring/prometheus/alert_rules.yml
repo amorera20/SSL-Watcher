@@ -1,0 +1,21 @@
+groups:
+- name: ssl_cert_alerts
+  rules:
+  - alert: SSLCertificateExpiringSoon
+    expr: ssl_cert_expiry_days < 15 and ssl_cert_expiry_days >= 0
+    for: 1h
+    labels:
+      severity: warning
+    annotations:
+      summary: "Certificado SSL est\xE1 por expirar para {{ $labels.domain }}"
+      description: "El certificado SSL para {{ $labels.domain }} expira en menos de\
+        \ 15 d\xEDas."
+  - alert: SSLCertificateExpiredOrInvalid
+    expr: ssl_cert_valid == 0
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "Certificado SSL inv\xE1lido o expirado para {{ $labels.domain }}"
+      description: "El certificado SSL para {{ $labels.domain }} est\xE1 expirado\
+        \ o no es v\xE1lido."
