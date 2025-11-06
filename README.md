@@ -25,19 +25,23 @@ This project provides an SSL monitoring solution built with Flask, Prometheus, A
 ## 📂 Project Structure
 
 CERT-WATCHER
-├──app
-│   ├── cert_watcher.py
+├── app
+│   └── cert_watcher.py
 │   ├── requirements.txt
+├── docs
+│   └── alert_flow.md
+|   ├── architecture.md
+|   ├── visualization.md
 ├── Dockerfile
 ├── k8s
-│   ├── cert-watcher-deployment.yaml
+│   └── cert-watcher-deployment.yaml
 │   ├── cert-watcher-service.yaml
 ├── monitoring
 │   └── alertmanager
-│       └── alertmanager-configmap.yaml
+│       └── alertmanager.yml
 |       ├── alertmanager-deployment.yaml
+|       ├── alertmanager-configmap.yaml
 |       ├── alertmanager-service.yaml
-|       ├── alertmanager.yml
 |   └── grafana
 │       └── grafana-deployment.yaml
 |       ├── grafana-service.yaml
@@ -47,7 +51,17 @@ CERT-WATCHER
 |       ├── prometheus-deployment.yaml
 |       ├── prometheus-service.yaml
 |       ├── prometheus.yml
-├── LICENSE.md
+├── LICENSE
+├── Screenshots
+│   └── Screenshot 1 - Metrics.png
+|   ├── Screenshot 1 Prometheus target up.png
+|   ├── Screenshot 2 Alertmanager alerts.png
+|   ├── Screenshot 3 Running Pods.png
+|   ├── Screenshot 4 Grafana connection with Prometheus.png
+|   ├── Screenshot 5 Grafana Dashboard.png
+|   ├── Screenshot 6 Prometheus alerts.png
+|   ├── Screenshot 7 Slack alerts.png
+|   ├── Screenshot 9 Prometheus query expiry days.png
 ├── ssl_dashboard_grafana.json
 └── README.md
 
