@@ -19,6 +19,6 @@ route:
 receivers:
   - name: 'slack-notifications'
     slack_configs:
-      - api_url: 'https://hooks.slack.com/services/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'
+      - api_url: '$(SLACK_WEBHOOK)'
         channel: '#cert-watcher'
         send_resolved: true

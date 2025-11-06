@@ -88,7 +88,7 @@ minikube service grafana
 ### 6. Configure Alertmanager
 Edit `alertmanager.yml` and set your Slack webhook URL:
 ```yaml
-api_url: 'https://hooks.slack.com/services/XXX/YYY/ZZZ'
+api_url: '$(SLACK_WEBHOOK)'
 ```
 
 ### 7. Simulate Alerts
