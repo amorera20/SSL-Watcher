@@ -24,31 +24,32 @@ This project provides an SSL monitoring solution built with Flask, Prometheus, A
 
 ## 📂 Project Structure
 
-cert-watcher
+CERT-WATCHER
+.
 ├──app
-│   ├── ssl_checker.py          # Python script to check SSL certificates
-│   ├── requirements.txt        # Python dependencies
+│   ├── cert_watcher.py
+│   ├── requirements.txt
 ├── Dockerfile
 ├── k8s
 │   ├── cert-watcher-deployment.yaml
 │   ├── cert-watcher-service.yaml
 ├── monitoring
 │   └── alertmanager
-│       └── alertmanager.yml        # Alertmanager configuration
+│       └── alertmanager-configmap.yaml
 |       ├── alertmanager-deployment.yaml
-|       ├── alertmanager-configmap.yaml
 |       ├── alertmanager-service.yaml
+|       ├── alertmanager.yml
 |   └── grafana
 │       └── grafana-deployment.yaml
 |       ├── grafana-service.yaml
 |   └── prometheus
-│       └── alert_rules.yml         # Prometheus alert rules
+│       └── alert_rules.yml
 |       ├── prometheus-configmap.yaml
 |       ├── prometheus-deployment.yaml
 |       ├── prometheus-service.yaml
 |       ├── prometheus.yml
 ├── LICENSE.md
-├── ssl_dashboard_grafana.json # Grafana dashboard
+├── ssl_dashboard_grafana.json
 └── README.md
 
 ## 🚀 Installation Steps
