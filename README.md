@@ -120,35 +120,41 @@ kubectl apply -f monitoring/alertmanager/alertmanager-deployment.yaml
 kubectl apply -f monitoring/alertmanager/alertmanager-service.yaml
 kubectl apply -f monitoring/alertmanager/alertmanager.yml
 ```
+### 9. Port-forward Alertmanager
+```bash
+kubectl port-forward svc/alertmanager 9093:9093
+```
 
-### 9. Create ConfigMap
+### 10. Create ConfigMap
 ```bash
 kubectl create configmap prometheus-config \
   --from-file=prometheus.yml \
   --from-file=alert_rules.yml
 ```
 
-### 10. Deploy Grafana
+### 11. Configure Alertmanager
+Edit `alertmanager.yml` and set your Slack webhook URL:
+```yaml
+api_url: '$(SLACK_WEBHOOK)'
+```
+
+### 12. Deploy Grafana
 ```bash
 kubectl apply -f monitoring/grafana/grafana-deployment.yaml
 kubectl apply -f monitoring/grafana/grafana-service.yaml
 ```
-Access Grafana:
-```bash
-minikube service grafana
-```
 
-### 11. Check Pods
+### 13. Check Pods
 ```bash
 kubectl get pods
 ```
 
-### 12. Check Services
+### 14. Check Services
 ```bash
 kubectl get svc
 ```
 
-### 13. Check Prometheus target & metrics
+### 15. Check Prometheus target & metrics
 - Port-forward Prometheus and open UI:
 ```bash
 # find Prometheus service name
@@ -160,7 +166,7 @@ kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090
 • Go to Status → Targets and look for cert-watcher target. Status should be UP.
 • Query metrics: ssl_cert_days_left in Prometheus Graph → Execute.
 
-### 9. Configure Grafana
+### 16. Configure Grafana
 - Check Grafana pod and service status
 ```bash
 kubectl get pods -l app=grafana
@@ -174,42 +180,60 @@ kubectl port-forward svc/grafana 3000:3000
 ```bash
 http://localhost:3000
 ```
-- Import the dashboard from `ssl_dashboard_grafana.json`
-- Add Prometheus as a data source
-- In the URL write:
-```bash
-http://prometheus:9090
-```
-- Click on Save & Test
-- 
-### 6. Configure Alertmanager
-Edit `alertmanager.yml` and set your Slack webhook URL:
-```yaml
-api_url: '$(SLACK_WEBHOOK)'
-```
-
-### 7. Simulate Alerts
-Run the checker with an expired domain:
-```bash
-python ssl_checker.py --domain expired.badssl.com
-```
-
-### 8. Port-forward Alertmanager
-```bash
-kubectl port-forward svc/alertmanager 9093:9093
-```
-
 ## 🔍 Observability
 - Import ssl_dashboard_grafana.json into Grafana.
   - Navigate to your Grafana UI (http://localhost:3000).
   - Go to Dashboards > New Dashboard > Import.
   - Click "Upload JSON file" and select ssl_dashboard_grafana.json from your project directory.
   - Ensure you select Prometheus as the data source when prompted.
-    
+  - In the URL write:
+```bash
+http://prometheus:9090
+```
+- Click on Save & Test
+
 - Visualizes:
   - SSL valid certificates
   - SSL invalid or expired certificates
 
+### 17. Simulate Alerts
+Run the checker with an expired domain:
+```bash
+python ssl_checker.py --domain expired.badssl.com
+```
+
+### 18. Verify in Prometheus
+- Access Prometheus:
+```bash
+http:localhost:9090
+```
+- Query the metrics:
+```bash
+ssl_cert_expiry_days
+ssl_cert_valid
+```
+- Confirm that the values reflect the alert status (for example, days < 10 or validity = 0).
+
+### 19. Verify in Alertmanager
+- Access Alertmanager:
+```bash
+http:localhost:9093
+```
+- Check that the alert is active and that it has the label severity: warning.
+
+### 20. Verify in Slack
+- Make sure you have correctly configured the Slack Webhook in Alertmanager:
+```bash
+receivers:
+  - name: 'slack-notifications'
+    slack_configs:
+      - api_url: 'https://hooks.slack.com/services/XXX/YYY/ZZZ'
+        channel: '#slack-channel'
+        title: '{{ .CommonAnnotations.summary }}'
+        text: '{{ .CommonAnnotations.description }}'
+```
+- Verify that the message reaches the Slack channel.
+    
 ## 📸 Screenshots
 - Metrics
 - Prometheus target UP
