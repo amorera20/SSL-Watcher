@@ -137,6 +137,9 @@ Edit `alertmanager.yml` and set your Slack webhook URL:
 ```yaml
 api_url: '$(SLACK_WEBHOOK)'
 ```
+```bash
+kubectl apply -f monitoring/alertmanager/alertmanager.yml
+```
 
 ### 12. Deploy Grafana
 ```bash
