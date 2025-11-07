@@ -73,7 +73,15 @@ brew install minikube
 brew install kubectl
 ```
 
-### 3. Start Colima and build a local image
+### 3. Verification
+```bash
+python3 --version
+docker --version
+minikube version
+kubectl version --client
+```
+
+### 4. Start Colima, build a local image, and check for the created image.
 ```bash
 colima start --cpu 4 --memory 6 --disk 60
 docker version
@@ -81,18 +89,10 @@ docker build -t cert-watcher:latest .
 docker images | grep cert-watcher
 ```
 
-### 4. Start Minikube
+### 5. Start Minikube
 ```bash
 minikube start
 kubectl get nodes
-```
-
-### 5. Verification
-```bash
-python3 --version
-docker --version
-minikube version
-kubectl version --client
 ```
 
 ### 6. Install Python dependencies
