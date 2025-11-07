@@ -1,5 +1,5 @@
 # SSL-Cert-Watcher
-This project provides an SSL monitoring solution built with Flask, Prometheus, Alertmanager, Grafana, and Kubernetes. It periodically checks configured domains, exposes Prometheus‑style metrics, visualizes status in Grafana, and triggers alerts in Slack to ensure that SSL certificates are valid, are close to expiration, or have expired.
+This project provides an SSL monitoring solution built with Flask, Prometheus, Alertmanager, Grafana, and Kubernetes. It periodically checks configured domains, exposes Prometheus‑style metrics, visualizes status in Grafana, and triggers alerts in Slack to ensure that SSL certificates are valid, close to expiration, or have expired.
 
 ## 📦 Features
 - Monitors SSL certificate validity and expiration dates
@@ -16,10 +16,13 @@ This project provides an SSL monitoring solution built with Flask, Prometheus, A
 
 ## 🛠 Requirements
 - Python 3.8+
+- Colima
+- Docker
+- Minikube
+- Kubectl
 - Prometheus
 - Alertmanager
 - Grafana
-- Kubernetes with Minikube (recommended for local testing)
 - Slack Webhook URL
 
 ## 📂 Project Structure
@@ -29,10 +32,6 @@ CERT-WATCHER
 ├── app
 │   └── cert_watcher.py
 │   ├── requirements.txt
-├── docs
-│   └── alert_flow.md
-|   ├── architecture.md
-|   ├── visualization.md
 ├── Dockerfile
 ├── k8s
 │   └── cert-watcher-deployment.yaml
@@ -53,51 +52,94 @@ CERT-WATCHER
 |       ├── prometheus-service.yaml
 |       ├── prometheus.yml
 ├── LICENSE
-├── Screenshots
-│   └── Screenshot 1 - Metrics.png
-|   ├── Screenshot 1 Prometheus target up.png
-|   ├── Screenshot 2 Alertmanager alerts.png
-|   ├── Screenshot 3 Running Pods.png
-|   ├── Screenshot 4 Grafana connection with Prometheus.png
-|   ├── Screenshot 5 Grafana Dashboard.png
-|   ├── Screenshot 6 Prometheus alerts.png
-|   ├── Screenshot 7 Slack alerts.png
-|   ├── Screenshot 9 Prometheus query expiry days.png
 ├── ssl_dashboard_grafana.json
 └── README.md
 ```
 
-## 🚀 Installation Steps
+## 🚀 Installation Steps (This project is optimized for macOS environments)
 
-### 1. Clone the repository
+### 1. Install Homebrew
 ```bash
-git clone https://github.com/your-username/ssl-monitoring
-cd ssl-monitoring
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+brew --version
 ```
 
-### 2. Install Python dependencies
+### 2. Install Required Tools
+```bash
+brew install python
+brew install colima
+brew install docker
+brew install minikube
+brew install kubectl
+```
+
+### 3. Start Colima
+```bash
+colima start --cpu 4 --memory 6 --disk 60
+docker version
+```
+
+### 4. Start Minikube
+```bash
+minikube start
+kubectl get nodes
+```
+
+### 5. Verification
+```bash
+python3 --version
+docker --version
+minikube version
+kubectl version --client
+```
+
+### 6. Install Python dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Deploy Prometheus and Alertmanager
-Apply the Kubernetes manifests:
+### 7. Install Prometheus + Grafana (kube-prometheus-stack)
 ```bash
-kubectl apply -f prometheus-deployment.yaml
-kubectl apply -f alertmanager-deployment.yaml
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm install prometheus prometheus-community/kube-prometheus-stack
 ```
 
-### 4. Deploy Grafana
+### 8. Deploy Prometheus and Alertmanager
+Apply the Kubernetes manifests:
 ```bash
-kubectl apply -f grafana-deployment.yaml
-kubectl apply -f grafana-service.yaml
+kubectl apply -f monitoring/prometheus/prometheus.yml
+kubectl apply -f monitoring/prometheus/alertmanager-deployment.yaml
+kubectl apply -f monitoring/prometheus/alert_rules.yml
+kubectl apply -f monitoring/prometheus/prometheus-configmap.yaml
+kubectl apply -f monitoring/prometheus/prometheus-service.yaml
+kubectl apply -f monitoring/alertmanager/alertmanager-configmap.yaml
+kubectl apply -f monitoring/alertmanager/alertmanager-deployment.yaml
+kubectl apply -f monitoring/alertmanager/alertmanager-service.yaml
+kubectl apply -f monitoring/alertmanager/alertmanager.yml
+```
+
+### 9. Deploy Grafana
+```bash
+kubectl apply -f monitoring/grafana/grafana-deployment.yaml
+kubectl apply -f monitoring/grafana/grafana-service.yaml
 ```
 Access Grafana:
 ```bash
 minikube service grafana
 ```
 
-### 5. Configure Grafana
+### 10. Check Pods
+```bash
+kubectl get pods
+```
+
+### 11. Check Services
+```bash
+kubectl get svc
+```
+
+### 9. Configure Grafana
 - Add Prometheus as a data source
 - Import the dashboard from `ssl_dashboard_grafana.json`
 
