@@ -7,15 +7,15 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: "Certificado SSL est\xE1 por expirar para {{ $labels.domain }}"
-      description: "El certificado SSL para {{ $labels.domain }} expira en menos de\
-        \ 15 d\xEDas."
+      summary: "SSL certificate is expiring for the domain {{ $labels.domain }}"
+      description: "SSL certificate for domain {{ $labels.domain }} expires in\
+        \ 15 days."
   - alert: SSLCertificateExpiredOrInvalid
     expr: ssl_cert_valid == 0
     for: 5m
     labels:
       severity: critical
     annotations:
-      summary: "Certificado SSL inv\xE1lido o expirado para {{ $labels.domain }}"
-      description: "El certificado SSL para {{ $labels.domain }} est\xE1 expirado\
-        \ o no es v\xE1lido."
+      summary: "SSL certificate is invalid or expired for the domain {{ $labels.domain }}"
+      description: "SSL certificate for {{ $labels.domain }} is expired\
+        \ or invalid."
