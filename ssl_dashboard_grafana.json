@@ -15,7 +15,7 @@
     "panels": [
       {
         "type": "bargauge",
-        "title": "D\u00edas restantes para expiraci\u00f3n del certificado",
+        "title": "Days remaining until the certificate expires",
         "datasource": "Prometheus",
         "targets": [
           {
@@ -56,7 +56,7 @@
       },
       {
         "type": "stat",
-        "title": "Estado del Certificado",
+        "title": "Certificate Status",
         "datasource": "Prometheus",
         "targets": [
           {
@@ -72,10 +72,10 @@
                 "type": "value",
                 "options": {
                   "0": {
-                    "text": "Inv\u00e1lido"
+                    "text": "Invalid"
                   },
                   "1": {
-                    "text": "V\u00e1lido"
+                    "text": "Invalid"
                   }
                 }
               }
@@ -105,7 +105,7 @@
       },
       {
         "type": "table",
-        "title": "Resumen de Certificados",
+        "title": "Certificates",
         "datasource": "Prometheus",
         "targets": [
           {
