@@ -73,10 +73,12 @@ brew install minikube
 brew install kubectl
 ```
 
-### 3. Start Colima
+### 3. Start Colima and build a local image
 ```bash
 colima start --cpu 4 --memory 6 --disk 60
 docker version
+docker build -t cert-watcher:latest .
+docker images | grep cert-watcher
 ```
 
 ### 4. Start Minikube
@@ -119,7 +121,14 @@ kubectl apply -f monitoring/alertmanager/alertmanager-service.yaml
 kubectl apply -f monitoring/alertmanager/alertmanager.yml
 ```
 
-### 9. Deploy Grafana
+### 9. Create ConfigMap
+```bash
+kubectl create configmap prometheus-config \
+  --from-file=prometheus.yml \
+  --from-file=alert_rules.yml
+```
+
+### 10. Deploy Grafana
 ```bash
 kubectl apply -f monitoring/grafana/grafana-deployment.yaml
 kubectl apply -f monitoring/grafana/grafana-service.yaml
@@ -129,20 +138,50 @@ Access Grafana:
 minikube service grafana
 ```
 
-### 10. Check Pods
+### 11. Check Pods
 ```bash
 kubectl get pods
 ```
 
-### 11. Check Services
+### 12. Check Services
 ```bash
 kubectl get svc
 ```
 
-### 9. Configure Grafana
-- Add Prometheus as a data source
-- Import the dashboard from `ssl_dashboard_grafana.json`
+### 13. Check Prometheus target & metrics
+- Port-forward Prometheus and open UI:
+```bash
+# find Prometheus service name
+kubectl get svc
+# port-forward (common service name below; if different, use the actual name from svc list)
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus 9090:9090
+```
+- Open in browser: http://localhost:9090
+• Go to Status → Targets and look for cert-watcher target. Status should be UP.
+• Query metrics: ssl_cert_days_left in Prometheus Graph → Execute.
 
+### 9. Configure Grafana
+- Check Grafana pod and service status
+```bash
+kubectl get pods -l app=grafana
+kubectl get svc grafana
+```
+- Enter Grafana dashboard
+```bash
+kubectl port-forward svc/grafana 3000:3000
+```
+- In your browser, go to:
+```bash
+http://localhost:3000
+```
+- Import the dashboard from `ssl_dashboard_grafana.json`
+- Add Prometheus as a data source
+- In the URL write:
+```bash
+http://prometheus:9090
+```
+- Click on Save & Test
+- 
 ### 6. Configure Alertmanager
 Edit `alertmanager.yml` and set your Slack webhook URL:
 ```yaml
