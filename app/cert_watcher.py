@@ -6,6 +6,7 @@ from prometheus_client import Gauge, generate_latest, CONTENT_TYPE_LATEST
 
 app = Flask(__name__)
 
+# Here you can change to the desired domains.
 DOMAINS = [
     "google.com",
     "amazon.com",
