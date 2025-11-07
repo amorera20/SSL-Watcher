@@ -206,6 +206,10 @@ python ssl_checker.py --domain expired.badssl.com
 ```
 
 ### 18. Verify in Prometheus
+- Port forwarding:
+```bash
+kubectl port-forward svc/prometheus 9090:9090
+```
 - Access Prometheus:
 ```bash
 http:localhost:9090
@@ -218,6 +222,10 @@ ssl_cert_valid
 - Confirm that the values reflect the alert status (for example, days < 10 or validity = 0).
 
 ### 19. Verify in Alertmanager
+- Port forwarding:
+```bash
+kubectl port-forward svc/alertmanager 9093:9093
+```
 - Access Alertmanager:
 ```bash
 http:localhost:9093
