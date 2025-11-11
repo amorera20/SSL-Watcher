@@ -108,17 +108,10 @@ helm install prometheus prometheus-community/kube-prometheus-stack
 ```
 
 ### 8. Deploy Prometheus and Alertmanager
-Apply the Kubernetes manifests:
+Apply manifests:
 ```bash
-kubectl apply -f monitoring/prometheus/prometheus.yml
-kubectl apply -f monitoring/prometheus/alertmanager-deployment.yaml
-kubectl apply -f monitoring/prometheus/alert_rules.yml
-kubectl apply -f monitoring/prometheus/prometheus-configmap.yaml
-kubectl apply -f monitoring/prometheus/prometheus-service.yaml
-kubectl apply -f monitoring/alertmanager/alertmanager-configmap.yaml
-kubectl apply -f monitoring/alertmanager/alertmanager-deployment.yaml
-kubectl apply -f monitoring/alertmanager/alertmanager-service.yaml
-kubectl apply -f monitoring/alertmanager/alertmanager.yml
+kubectl apply -f monitoring/prometheus/
+kubectl apply -f monitoring/alertmanager/
 ```
 ### 9. Port-forward Alertmanager
 ```bash
@@ -246,6 +239,7 @@ receivers:
 - Verify that the message reaches the Slack channel.
     
 ## 📸 Screenshots
+This folder contains screenshots that validate the project’s functionality.
 - Metrics
 - Prometheus target UP
 - Alertmanager alerts
